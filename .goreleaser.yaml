@@ -16,7 +16,16 @@ before:
     - go generate ./...
 
 builds:
-  - env:
+  - # ID of the build.
+    # Default: Binary name
+    id: "ease"
+    binary: ease
+
+    # For auto-versioning
+    ldflags:
+      - -X github.com/dangrondahl/ease/internal/version.Version={{.Tag}}
+
+    env:
       - CGO_ENABLED=0
     goos:
       - linux

@@ -1,12 +1,11 @@
 version: v1
 
-# Load HelmRelease template from a Git repository
 gitops:
-  owner: {{ .GitOps.Owner }}
-  repo: {{ .GitOps.Repo }}
+  url: '{{ .GitOps.URL }}'
 
 template:
+  # Load HelmRelease template from a Git repository
   fromGit:
-    url: {{ .Template.FromGit.URL }}
-    ref: {{ .Template.FromGit.Ref }} # may be a branch, tag, or commit hash (tag recommended)
-    path: {{ .Template.FromGit.Path }}
+    url: '{{ .Template.FromGit.URL }}'
+    ref: '{{ .Template.FromGit.Ref }}' # may be a branch, tag, or commit hash (tag recommended)
+    path: '{{ .Template.FromGit.Path }}'
