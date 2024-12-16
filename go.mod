@@ -2,7 +2,11 @@ module github.com/dangrondahl/ease
 
 go 1.23.3
 
-require github.com/spf13/cobra v1.8.1
+require (
+	github.com/pkg/errors v0.9.1
+	github.com/spf13/cobra v1.8.1
+	sigs.k8s.io/yaml v1.4.0
+)
 
 require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect

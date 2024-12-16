@@ -1,42 +1,12 @@
 version: v1
 
+# Load HelmRelease template from a Git repository
 gitops:
-  owner: <owner>
-  repo: <repo>
+  owner: {{ .GitOps.Owner }}
+  repo: {{ .GitOps.Repo }}
 
 template:
   fromGit:
-    url: <repository_url>
-    ref: <branch_or_tag>
-    path: templates/helmrelease.yaml
-
-common:
-  helmRelease:
-    namespace: shared-namespace
-    chart:
-      name: my-chart
-      repository: https://charts.my-org.com
-      version: 1.0.0
-    annotations:
-      managedBy: ease
-      purpose: shared-configuration
-  helmValues:
-    replicaCount: 2
-    image:
-      repository: my-app
-      tag: latest
-
-environments:
-  dev:
-    path: environments/dev
-    helmRelease:
-      namespace: dev
-    helmValues:
-      replicaCount: 4
-
-  stage:
-    path: environments/stage
-    helmRelease:
-      namespace: stage
-    helmValues:
-      replicaCount: 6
+    url: {{ .Template.FromGit.URL }}
+    ref: {{ .Template.FromGit.Ref }} # may be a branch, tag, or commit hash (tag recommended)
+    path: {{ .Template.FromGit.Path }}
