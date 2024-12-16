@@ -1,0 +1,11 @@
+version: v1
+
+gitops:
+  url: 'https://github.com/owner/gitops-repo.git'
+
+template:
+  # Load HelmRelease template from a Git repository
+  fromGit:
+    url: 'https://github.com/owner/template-repo.git'
+    ref: 'ref' # may be a branch, tag, or commit hash (tag recommended)
+    path: 'path'
