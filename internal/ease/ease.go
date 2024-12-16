@@ -44,39 +44,20 @@ func NewFromPrompt() *Ease {
 
 	form := huh.NewForm(
 
-		huh.NewGroup(huh.NewNote().
-			Title("Create new ease config").
-			Description("Happy to see you use _ease_.\n\nLet's configure the tool?\n\n").
-			Next(true).
-			NextLabel("Next"),
+		huh.NewGroup(
+			huh.NewNote().Title("Create new ease config").Description("Happy to see you use _ease_.\n\nLet's configure the tool?\n\n").Next(true).NextLabel("Next"),
 		),
 
 		huh.NewGroup(
-			huh.NewNote().
-				Title("GitOps repository").
-				Description("First, declare which GitOps repository\nThis service should release to:\n"),
-			huh.NewInput().
-				Title("URL of GitOps repository").
-				Placeholder("https://github.com/owner/gitops-repo").
-				Value(&e.GitOps.URL),
+			huh.NewNote().Title("GitOps repository").Description("First, declare which GitOps repository\nThis service should release to:\n"),
+			huh.NewInput().Title("URL of GitOps repository").Placeholder("https://github.com/owner/gitops-repo").Value(&e.GitOps.URL),
 		),
 
 		huh.NewGroup(
-			huh.NewNote().
-				Title("HelmRelease template repository").
-				Description("Now, declare where your HelmRelease template is:\n"),
-			huh.NewInput().
-				Title("URL").
-				Placeholder("Enter the URL of the repository").
-				Value(&e.Template.FromGit.URL),
-			huh.NewInput().
-				Title("Ref").
-				Placeholder("Enter the ref of the repository\n ref can be a branch, tag, or commit SHA\n").
-				Value(&e.Template.FromGit.Ref),
-			huh.NewInput().
-				Title("Path").
-				Placeholder("Enter the path to the HelmRelease template\n").
-				Value(&e.Template.FromGit.Path),
+			huh.NewNote().Title("HelmRelease template repository").Description("Now, declare where your HelmRelease template is:\n"),
+			huh.NewInput().Title("URL").Placeholder("Enter the URL of the repository").Value(&e.Template.FromGit.URL),
+			huh.NewInput().Title("Ref").Placeholder("Enter the ref of the repository\n ref can be a branch, tag, or commit SHA\n").Value(&e.Template.FromGit.Ref),
+			huh.NewInput().Title("Path").Placeholder("Enter the path to the HelmRelease template\n").Value(&e.Template.FromGit.Path),
 		),
 	)
 

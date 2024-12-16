@@ -25,11 +25,6 @@ var initCmd = &cobra.Command{
 		// Define the output file path
 		outputPath := filepath.Join(cwd, "ease.yaml")
 
-		/*err = ease.New().
-		WithGitOps("my-organization", "my-repo").
-		WithTemplate("https://github.com/example/helmrelease-templates.git", "main", "templates/helmrelease.yaml").
-		CreateEaseFile(outputPath)
-		*/
 		err = ease.NewFromPrompt().CreateEaseFile(outputPath)
 
 		if err != nil {
