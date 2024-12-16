@@ -5,7 +5,6 @@ go 1.23.3
 require (
 	github.com/approvals/go-approval-tests v0.0.0-20241211183344-15d1ffb738a9
 	github.com/charmbracelet/huh v0.6.0
-	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.8.1
 	sigs.k8s.io/yaml v1.4.0
 )

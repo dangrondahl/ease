@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/charmbracelet/huh"
-	"github.com/pkg/errors"
 	"sigs.k8s.io/yaml"
 )
 
@@ -121,7 +120,7 @@ func (e *Ease) CreateEaseFile(path string) error {
 
 	// Check if the file already exists
 	if _, err := os.Stat(path); err == nil {
-		return errors.New("ease.yaml already exists")
+		return fmt.Errorf("ease.yaml already exists")
 	}
 
 	buf := bytes.Buffer{}
