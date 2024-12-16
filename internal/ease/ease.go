@@ -1,11 +1,10 @@
 package ease
 
 import (
+	"bytes"
 	"fmt"
-	"html/template"
 	"os"
 
-	"github.com/dangrondahl/ease/internal/static"
 	"github.com/pkg/errors"
 	"sigs.k8s.io/yaml"
 )
@@ -55,54 +54,56 @@ func FromFile(path string) (*Ease, error) {
 	return cfg, nil
 }
 
-func (c *Ease) WithVersion(version string) *Ease {
-	c.Version = version
-	return c
+func (e *Ease) WithVersion(version string) *Ease {
+	e.Version = version
+	return e
 }
 
-func (c *Ease) WithGitOps(owner, repo string) *Ease {
-	c.SetGitOps(owner, repo)
-	return c
+func (e *Ease) WithGitOps(owner, repo string) *Ease {
+	e.SetGitOps(owner, repo)
+	return e
 }
 
-func (c *Ease) WithTemplate(url, ref, path string) *Ease {
-	c.SetTemplate(url, ref, path)
-	return c
+func (e *Ease) WithTemplate(url, ref, path string) *Ease {
+	e.SetTemplate(url, ref, path)
+	return e
 }
 
-func (c *Ease) SetGitOps(owner, repo string) {
-	c.GitOps.Owner = owner
-	c.GitOps.Repo = repo
+func (e *Ease) SetGitOps(owner, repo string) {
+	e.GitOps.Owner = owner
+	e.GitOps.Repo = repo
 }
 
-func (c *Ease) SetTemplate(url, ref, path string) {
-	c.Template.FromGit.URL = url
-	c.Template.FromGit.Ref = ref
-	c.Template.FromGit.Path = path
+func (e *Ease) SetTemplate(url, ref, path string) {
+	e.Template.FromGit.URL = url
+	e.Template.FromGit.Ref = ref
+	e.Template.FromGit.Path = path
 }
 
-func (c *Ease) CreateEaseFile(path string) error {
+// CreateEaseFile creates a new ease.yaml file at the specified path using an embedded YAML template.
+// If the file already exists, it returns an error.
+//
+// Parameters:
+//   - path: The file path where the ease.yaml file will be created.
+//
+// Returns:
+//   - error: An error if the file already exists, if the template parsing fails, if the file creation fails,
+//     or if writing to the file fails.
+func (e *Ease) CreateEaseFile(path string) error {
 
 	// Check if the file already exists
 	if _, err := os.Stat(path); err == nil {
 		return errors.New("ease.yaml already exists")
 	}
 
-	// Parse the embedded YAML template
-	tmpl, err := template.New("ease.yaml").Parse(string(static.EaseExampleConfig))
-	if err != nil {
-		return fmt.Errorf("failed to parse embedded template: %w", err)
+	buf := bytes.Buffer{}
+
+	if err := Render(&buf, e); err != nil {
+		return fmt.Errorf("failed to render ease.yaml: %w", err)
 	}
 
-	// Create the output file
-	file, err := os.Create(path)
-	if err != nil {
-		return fmt.Errorf("failed to create ease.yaml: %w", err)
-	}
-	defer file.Close()
-
-	// Execute the template with the provided data
-	if err := tmpl.Execute(file, c); err != nil {
+	// write the buffer to the file
+	if err := os.WriteFile(path, buf.Bytes(), 0644); err != nil {
 		return fmt.Errorf("failed to write ease.yaml: %w", err)
 	}
 
