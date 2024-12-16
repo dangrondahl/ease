@@ -1,0 +1,32 @@
+name: Validate PR Title
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  validate-title:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Validate PR title
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          echo "Checking PR title: '$PR_TITLE'"
+          echo "$PR_TITLE" | grep -Eq '^(fix|feat|docs|style|refactor|test|chore|revert|build|ci)(\([a-zA-Z0-9_-]+\))?:\ .{1,100}$'
+          if [ $? -ne 0 ]; then
+            echo "--------------------------------------"
+            echo "ERROR: PR title does not follow the Conventional Commits standard."
+            echo "Expected format: <type>[optional scope]: <description>"
+            echo ""
+            echo "<type> can be one of the following: [fix, feat, docs, style, refactor, test, chore, revert, build, ci]"
+            echo "Max length of PR title: 72 characters."
+            echo ""
+            echo "Example: feat(ci): add a new CI pipeline"
+            echo "--------------------------------------"
+            exit 1
+          fi
+          

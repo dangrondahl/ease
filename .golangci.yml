@@ -1,0 +1,32 @@
+run:
+  go: "1.22"
+  timeout: 5m
+
+linters:
+  enable:
+    - gofmt
+    - forbidigo
+    - depguard
+  disable:
+    - errcheck
+
+linters-settings:
+  gofmt:
+    # Simplify code: gofmt with `-s` option.
+    # Default: true
+    simplify: false
+    # Apply the rewrite rules to the source before reformatting.
+    # https://pkg.go.dev/cmd/gofmt
+    # Default: []
+    rewrite-rules:
+      - pattern: "interface{}"
+        replacement: "any"
+  forbidigo:
+    forbid:
+      - 'ioutil\.*'
+  depguard:
+    rules:
+      main:
+        deny:
+          - pkg: "github.com/pkg/errors"
+            desc: "use stdlib instead"
